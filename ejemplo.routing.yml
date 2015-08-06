@@ -1,0 +1,9 @@
+
+ejemplo.default_controller_hola:
+  path: '/ejemplo/hola/{name}'
+  defaults:
+    _controller: '\Drupal\ejemplo\Controller\DefaultController::hola'
+    _title: 'Hola Mundo'
+  requirements:
+    _permission: 'access content'
+

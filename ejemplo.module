@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Contains ejemplo.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ejemplo_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the ejemplo module.
+    case 'help.page.ejemplo':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Ejemplo') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ejemplo_theme() {
+  $theme = [];
+
+  $theme['example_progress'] = array(
+    'variables' => array(
+      'percentage' => 0,
+      'maximum' => 100,
+      ),
+  );
+
+  return $theme;
+}

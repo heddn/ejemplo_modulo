@@ -1,0 +1,6 @@
+name: ejemplo
+type: module
+description: Ejemplo
+core: 8.x
+package: Examples
+
