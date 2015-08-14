@@ -54,10 +54,12 @@ class ExampleWidgetType extends WidgetBase {
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $value = isset($items[$delta]->value) ? $items[$delta]->value : NULL;
 
-    $element += array(
-      '#theme' => 'example_progress',
-      '#percentage' => $value,
-      '#maximum' => $this->getFieldSetting('maximum'),
+    $element = array(
+      '#type' => 'textfield',
+      '#title' => t('Percentage Complete'),
+      '#default_value' => $value,
+      '#size' => 4,
+      '#maxlength' => 6,
     );
 
     return array('value' => $element);

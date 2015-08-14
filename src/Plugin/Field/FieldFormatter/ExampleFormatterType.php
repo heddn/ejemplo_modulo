@@ -16,7 +16,11 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @FieldFormatter(
  *   id = "example_progress",
- *   label = @Translation("Example progress formatter") * )
+ *   label = @Translation("Example progress formatter"),
+ *   field_types = {
+ *     "example_progress"
+ *   }
+ * )
  */
 class ExampleFormatterType extends FormatterBase {
   /**
@@ -32,12 +36,12 @@ class ExampleFormatterType extends FormatterBase {
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $elements = array();
+    $elements = [];
 
     $elements['maximum'] = array(
       '#type' => 'textfield',
       '#title' => t('Maximum'),
-      '#default_value' => $this->getFieldSetting('maximum'),
+      '#default_value' => $this->getFieldSetting('maximum') ? $this->getFieldSetting('maximum') : $this->defaultSettings()['maximum'],
       '#size' => 4,
       '#maxlength' => 6,
       '#required' => TRUE,
@@ -51,10 +55,10 @@ class ExampleFormatterType extends FormatterBase {
    */
   public function settingsSummary() {
     $arguments = array(
-      '%maximum' => $this->getFieldSetting('maximum'),
+      '%maximum' => $this->getFieldSetting('maximum') ? $this->getFieldSetting('maximum') : $this->defaultSettings()['maximum'],
     );
     $summary = array(
-      '#markup' => $this->t('Minimum %minimum & maximum: %maximum', $arguments),
+      '#markup' => $this->t('Maximum value: %maximum', $arguments),
     );
 
     return $summary;
@@ -67,7 +71,12 @@ class ExampleFormatterType extends FormatterBase {
     $elements = array();
 
     foreach ($items as $delta => $item) {
-      $elements[$delta] = array('#markup' => $item->value);
+      $elements[$delta] = array(
+        '#theme' => 'example_progress',
+        '#percentage' => $item->value,
+        '#maximum' => $this->getFieldSetting('maximum') ? $this->getFieldSetting('maximum') : $this->defaultSettings()['maximum'],
+      );
+
     }
 
     return $elements;

@@ -10,12 +10,13 @@ namespace Drupal\ejemplo\Plugin\Field\FieldType;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\TypedData\DataDefinition;
+use Drupal\Core\StringTranslation\TranslationWrapper;
 
 /**
  * Plugin implementation of the 'Example field type' field type.
  *
  * @FieldType(
- *   id = "Example progress",
+ *   id = "example_progress",
  *   label = @Translation("Example Progress"),
  *   description = @Translation("Example progress"),
  *   default_widget = "example_progress",
@@ -35,7 +36,7 @@ class ExampleFieldType extends FieldItemBase {
    */
   public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
     $properties['value'] = DataDefinition::create('string')
-      ->setLabel(t('Decimal value'))
+      ->setLabel(new TranslationWrapper('Text value'))
       ->setRequired(TRUE);
 
     return $properties;
@@ -53,6 +54,26 @@ class ExampleFieldType extends FieldItemBase {
         ),
       ),
     );
+  }
+
+  /**
+   * Implements \Drupal\Core\TypedData\ComplexDataInterface::isEmpty().
+   */
+  public function isEmpty() {
+    foreach ($this->properties as $property) {
+      $definition = $property->getDataDefinition();
+      if (!$definition->isComputed() && $property->getValue() !== NULL) {
+        return FALSE;
+      }
+    }
+    if (isset($this->values)) {
+      foreach ($this->values as $name => $value) {
+        if (!empty($value) && !isset($this->properties[$name])) {
+          return FALSE;
+        }
+      }
+    }
+    return TRUE;
   }
 
 }
