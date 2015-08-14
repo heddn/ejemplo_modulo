@@ -16,7 +16,11 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @FieldWidget(
  *   id = "example_progress",
- *   label = @Translation("Example progress") * )
+ *   label = @Translation("Example progress"),
+ *   field_types = {
+ *     "example_progress",
+ *   }
+ * )
  */
 class ExampleWidgetType extends WidgetBase {
   /**
@@ -31,26 +35,6 @@ class ExampleWidgetType extends WidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
-    $element = array();
-    // Implement settings form.
-
-    return $element;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function settingsSummary() {
-    $summary = array();
-    // Implement settings summary.
-
-    return $summary;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $value = isset($items[$delta]->value) ? $items[$delta]->value : NULL;
 
@@ -58,8 +42,8 @@ class ExampleWidgetType extends WidgetBase {
       '#type' => 'textfield',
       '#title' => t('Percentage Complete'),
       '#default_value' => $value,
-      '#size' => 4,
-      '#maxlength' => 6,
+      '#size' => 3,
+      '#maxlength' => 3,
     );
 
     return array('value' => $element);

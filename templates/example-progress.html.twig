@@ -7,4 +7,4 @@
  * - percentage: percentage complete.
  */
 #}
-<progress title="{{ percentage }}%" value="{{ percentage }}" max="{{ maximum }}" class="super-bar">{{ percentage }}%</progress>
+<progress title="{{ percentage }}%" value="{{ percentage * maximum / 100 }}" max="{{ maximum }}" class="super-bar">{{ percentage }}%</progress>

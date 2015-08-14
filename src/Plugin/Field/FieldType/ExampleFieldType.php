@@ -57,23 +57,44 @@ class ExampleFieldType extends FieldItemBase {
   }
 
   /**
-   * Implements \Drupal\Core\TypedData\ComplexDataInterface::isEmpty().
+   * {@inheritdoc}
+   */
+  public function getConstraints() {
+    $constraint_manager = \Drupal::typedDataManager()->getValidationConstraintManager();
+    $constraints = parent::getConstraints();
+
+    $label = $this->getFieldDefinition()->getLabel();
+
+    $min = 0;
+    $constraints[] = $constraint_manager->create('ComplexData', array(
+      'value' => array(
+        'Range' => array(
+          'min' => $min,
+          'minMessage' => t('%name: the value may be no less than %min.', array('%name' => $label, '%min' => $min)),
+        )
+      ),
+    ));
+    $max = 100;
+    $constraints[] = $constraint_manager->create('ComplexData', array(
+      'value' => array(
+        'Range' => array(
+          'max' => $max,
+          'maxMessage' => t('%name: the value may be no greater than %max.', array('%name' => $label, '%max' => $max)),
+        )
+      ),
+    ));
+
+    return $constraints;
+  }
+
+  /**
+   * {@inheritdoc}
    */
   public function isEmpty() {
-    foreach ($this->properties as $property) {
-      $definition = $property->getDataDefinition();
-      if (!$definition->isComputed() && $property->getValue() !== NULL) {
-        return FALSE;
-      }
+    if (empty($this->value) && (string) $this->value !== '0') {
+      return TRUE;
     }
-    if (isset($this->values)) {
-      foreach ($this->values as $name => $value) {
-        if (!empty($value) && !isset($this->properties[$name])) {
-          return FALSE;
-        }
-      }
-    }
-    return TRUE;
+    return FALSE;
   }
 
 }

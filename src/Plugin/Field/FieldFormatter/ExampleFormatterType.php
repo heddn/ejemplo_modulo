@@ -41,7 +41,7 @@ class ExampleFormatterType extends FormatterBase {
     $elements['maximum'] = array(
       '#type' => 'textfield',
       '#title' => t('Maximum'),
-      '#default_value' => $this->getFieldSetting('maximum') ? $this->getFieldSetting('maximum') : $this->defaultSettings()['maximum'],
+      '#default_value' => $this->getSetting('maximum'),
       '#size' => 4,
       '#maxlength' => 6,
       '#required' => TRUE,
@@ -54,11 +54,10 @@ class ExampleFormatterType extends FormatterBase {
    * {@inheritdoc}
    */
   public function settingsSummary() {
-    $arguments = array(
-      '%maximum' => $this->getFieldSetting('maximum') ? $this->getFieldSetting('maximum') : $this->defaultSettings()['maximum'],
-    );
+    $summary = [];
+
     $summary = array(
-      '#markup' => $this->t('Maximum value: %maximum', $arguments),
+      '#markup' => $this->t('Maximum value: %maximum', array('%maximum' => $this->getSetting('maximum'))),
     );
 
     return $summary;
@@ -68,15 +67,14 @@ class ExampleFormatterType extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items) {
-    $elements = array();
+    $elements = [];
 
     foreach ($items as $delta => $item) {
       $elements[$delta] = array(
         '#theme' => 'example_progress',
         '#percentage' => $item->value,
-        '#maximum' => $this->getFieldSetting('maximum') ? $this->getFieldSetting('maximum') : $this->defaultSettings()['maximum'],
+        '#maximum' => $this->getSetting('maximum'),
       );
-
     }
 
     return $elements;
