@@ -13,7 +13,7 @@ use Drupal\Core\TypedData\DataDefinition;
 use Drupal\Core\StringTranslation\TranslationWrapper;
 
 /**
- * Plugin implementation of the 'Example field type' field type.
+ * Plugin implementation of the 'example_progress' field type.
  *
  * @FieldType(
  *   id = "example_progress",
@@ -91,10 +91,8 @@ class ExampleFieldType extends FieldItemBase {
    * {@inheritdoc}
    */
   public function isEmpty() {
-    if (empty($this->value) && (string) $this->value !== '0') {
-      return TRUE;
-    }
-    return FALSE;
+    $value = $this->get('value')->getValue();
+    return $value === NULL || $value === '';
   }
 
 }
